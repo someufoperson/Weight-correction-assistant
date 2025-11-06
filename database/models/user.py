@@ -19,6 +19,7 @@ class UserOrm(Base):
     __tablename__ = "user"
 
     user_id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    name: Mapped[str] = mapped_column(String(length=64))
     age: Mapped[int]
     actual_weight: Mapped[float]
     height = Mapped[int]

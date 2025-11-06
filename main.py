@@ -3,6 +3,7 @@ from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
 from src.handlers.user import user_router
+from src.handlers.registration import register_router
 from database.database import async_main
 from log_config import logger
 
@@ -19,7 +20,7 @@ async def main():
     bot = Bot(token=settings.TOKEN_bot, 
           default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
-    dp.include_router(router=user_router)
+    dp.include_routers(user_router, register_router)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

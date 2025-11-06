@@ -5,6 +5,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.state import StatesGroup, State
 
 from database.queries.user import UserQueries
+from src.handlers import registration
 
 user_router = Router()
 
@@ -12,6 +13,6 @@ user_router = Router()
 async def start(msg: Message):
     user = await UserQueries.is_exitsts(msg.from_user.id)
     if not user:
-        ...
+        await registration.test(msg)
     elif user:
         ...
