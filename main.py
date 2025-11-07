@@ -1,24 +1,20 @@
-from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
-from aiogram.client.default import DefaultBotProperties
+from aiogram import Dispatcher
 
 from src.handlers.user import user_router
 from src.handlers.registration import register_router
 from database.database import async_main
 from log_config import logger
+from bot_init import bot_with_default
 
 import asyncio
 
-from config import settings
-
+bot = bot_with_default()
 
 async def main():
     """
     async_main() it's create table from Base.metadata
     """
     await async_main()
-    bot = Bot(token=settings.TOKEN_bot, 
-          default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
     dp.include_routers(user_router, register_router)
     await dp.start_polling(bot)

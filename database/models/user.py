@@ -16,17 +16,17 @@ class Language(enum.Enum):
     english = "english"
 
 class UserOrm(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     user_id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    name: Mapped[str] = mapped_column(String(length=64))
-    age: Mapped[int]
-    actual_weight: Mapped[float]
-    height = Mapped[int]
-    desired_weight: Mapped[float]
-    gender: Mapped[Gender]
-    undesirable_products: Mapped[str] = mapped_column(String(length=1024))
-    preferred_products: Mapped[str] = mapped_column(String(length=1024))
+    name: Mapped[str] = mapped_column(String(length=64), nullable=True)
+    date_of_birth: Mapped[datetime.date] = mapped_column(nullable=True)
+    actual_weight: Mapped[float] = mapped_column(nullable=True)
+    height: Mapped[int] = mapped_column(nullable=True)
+    desired_weight: Mapped[float] = mapped_column(nullable=True)
+    gender: Mapped[Gender] = mapped_column(nullable=True)
+    undesirable_products: Mapped[str] = mapped_column(String(length=1024), nullable=True)
+    preferred_products: Mapped[str] = mapped_column(String(length=1024), nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
-    lang: Mapped[Language]
+    lang: Mapped[Language] = mapped_column(nullable=True)
     # correction_program: Mapped["correction_programm"] = relationship()

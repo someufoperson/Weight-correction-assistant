@@ -9,7 +9,7 @@ class Type_of_correction(enum.Enum):
     weight_gain = "weight_gain"
     weight_loss = "weight_loss"
 
-class Correction_programsOrm(Base):
+class Correction_programOrm(Base):
     __tablename__ = "correction_programs"
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True, 
