@@ -3,3 +3,4 @@ venv/
 __pycache__/
 bot_log.log
 *.log
+time_work.txt

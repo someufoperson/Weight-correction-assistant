@@ -13,6 +13,6 @@ user_router = Router()
 async def start(msg: Message):
     user = await UserQueries.is_exitsts(msg.from_user.id)
     if not user:
-        await registration.test(msg)
+        await registration.start_register(msg)
     elif user:
         ...

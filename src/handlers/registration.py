@@ -1,8 +1,10 @@
+from datetime import date
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, CallbackQuery
 
+from locales.locale_read import locale_read
 from database.queries.user import UserQueries
 from src.keyboards import registration as keyboard_reg
 from src.handlers.utils import send_message as send_msg
@@ -12,24 +14,16 @@ register_router = Router()
 
 class Registration_state(StatesGroup):
     name = State()
-    age = State()
+    date_of_birth = State()
     weight = State()
     desired_weight = State()
     height = State()
     undesirable_products = State()
     preferred_products = State()
 
-async def test(msg: Message):
+async def start_register(msg: Message):
     await UserQueries.new_user_id(user_id=msg.from_user.id)
-    msg_text = "🇷🇺\n"
-    msg_text += "Ого! Кажется, мы с тобой ещё не знакомы... Исправим это?😉\n"
-    msg_text += "Меня зовут Бодя-лис и я профессиональный помощник в коррекции"
-    msg_text += " веса 🦊 Подскажи, на каком языке я могу с тобой общаться?"
-    msg_text += "\n\n🇺🇸\n"
-    msg_text += "Wow! It seems we haven't met yet... Shall we fix that?😉\n"
-    msg_text += "My name is Bodya-fox and I am a professional weight loss "
-    msg_text += "coach 🦊 Please tell me which language I can use to "
-    msg_text += "communicate with you"
+    msg_text = locale_read(language="", func_name="start_register")
     await send_msg.from_msg(text=msg_text, 
                             msg=msg, 
                             reply_markup=keyboard_reg.language_choice())
@@ -40,27 +34,31 @@ async def language_add(call: CallbackQuery, state: FSMContext):
     await state.update_data(language = language)
     await UserQueries.edit_lang(user_id=call.from_user.id, language=language)
     await call.answer()
-    if language == "russian":
-        msg_text = "Отлично! Как я могу к тебе обращаться? 😊"
-
-    elif language == "english":
-        msg_text = "Great! How can I address you? 😊"
-
+    msg_text = locale_read(language=language, func_name=language_add.__name__)
     await send_msg.from_call(text=msg_text, call=call)
     await state.set_state(Registration_state.name)
 
 @register_router.message(Registration_state.name)
 async def name_add(msg: Message, state: FSMContext):
-    #FUNCTION NEED EDIT, msg_text with date of birth
     await UserQueries.edit_name(user_id=msg.from_user.id, name=msg.text)
     language = await get_language(state=state)
-    if language == "russian":
-        msg_text = f"Приятно познакомиться, {msg.text}!\nУкажите Вашу дату рождения. "
-        msg_text += "Данная информация нужна для более корректного составления "
-        msg_text += "программы питания, достаточно указать возраст без даты рождения😊"
-    elif language == "english":
-        msg_text = f"Nice to meet you, {msg.text}!\nPlease indicate your date of birth. "
-        msg_text += "This information is needed to create a more accurate "
-        msg_text += "nutrition plan. Please indicate your age without your date of birth😊"
+    context = {"name": msg.text}
+    msg_text = locale_read(language=language, 
+                           func_name=name_add.__name__).format(**context)
     await send_msg.from_msg(msg_text, msg=msg)
-    await state.set_state(Registration_state.age)
+    await state.set_state(Registration_state.date_of_birth)
+
+@register_router.message(Registration_state.date_of_birth)
+async def dob_add(msg: Message, state: FSMContext):
+    """The function checks whether the user's text matches the date 
+    in the required format dd.mm.yyyy. If it matches, it checks the user's 
+    current age. If the user is under 18, it notifies them that the 
+    functionality will be partially available. If the user is over 18 but 
+    under 60, it simply greets them. If the user is over 60, it asks them to 
+    consult their doctor about all the options offered by the bot"""
+    try:
+        day, mounth, year = msg.text.split(".")
+    except Exception as e:
+        print(e)
+    d = date(int(year), int(mounth), int(day))
+    print(d)

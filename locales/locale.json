@@ -1,0 +1,17 @@
+{
+    "start_register": "🇷🇺\nОго! Кажется, мы с тобой ещё не знакомы... Исправим это?😉\nМеня зовут Бодя-лис и я профессиональный помощник в коррекции веса 🦊 Подскажи, на каком языке я могу с тобой общаться?\n\n🇺🇸\nWow! It seems we haven't met yet... Shall we fix that?😉\nMy name is Bodya-fox and I am a professional weight loss coach 🦊 Please tell me which language I can use to communicate with you",
+
+    "language_add": {
+
+        "english": "Great! How can I address you? 😊",
+        
+        "russian": "Отлично! Как я могу к вам обращаться? 😊"
+    },
+
+    "name_add": {
+
+        "english": "Nice to meet you, {name}!\nPlease indicate your date of birth. This information is needed to create a more accurate nutrition plan😊 Example of entering date of birth: 31.01.1991",
+
+        "russian": "Приятно познакомиться, {name}!\nУкажите Вашу дату рождения. Данная информация поможет нам более корректно составить план коррекции веса😊 Пример ввода даты рождения: 31.01.1991"
+    }
+}
